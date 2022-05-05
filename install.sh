@@ -1,6 +1,8 @@
 #!/bin/bash
 
 apt-get update && apt-get install -y default-jdk
+sleep 60
+apt-get update && apt-get install -y default-jdk
 
 mkdir -p /data/zookeeper
 wget -c https://dlcdn.apache.org/zookeeper/zookeeper-3.8.0/apache-zookeeper-3.8.0-bin.tar.gz -O - | sudo tar -xz -C /opt
