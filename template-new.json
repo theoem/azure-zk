@@ -1,0 +1,534 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "virtualMachines_zk0_name": {
+      "defaultValue": "zk0",
+      "type": "String"
+    },
+    "virtualMachines_zk1_name": {
+      "defaultValue": "zk1",
+      "type": "String"
+    },
+    "virtualMachines_zk2_name": {
+      "defaultValue": "zk2",
+      "type": "String"
+    },
+    "publicIPAddresses_publicIP0_name": {
+      "defaultValue": "publicIP0",
+      "type": "String"
+    },
+    "publicIPAddresses_publicIP1_name": {
+      "defaultValue": "publicIP1",
+      "type": "String"
+    },
+    "publicIPAddresses_publicIP2_name": {
+      "defaultValue": "publicIP2",
+      "type": "String"
+    },
+    "virtualNetworks_zookeeperVNET_name": {
+      "defaultValue": "zookeeperVNET",
+      "type": "String"
+    },
+    "availabilitySets_zookeeperAvSet_name": {
+      "defaultValue": "zookeeperAvSet",
+      "type": "String"
+    },
+    "networkInterfaces_zookeeperNIC0_name": {
+      "defaultValue": "zookeeperNIC0",
+      "type": "String"
+    },
+    "networkInterfaces_zookeeperNIC1_name": {
+      "defaultValue": "zookeeperNIC1",
+      "type": "String"
+    },
+    "networkInterfaces_zookeeperNIC2_name": {
+      "defaultValue": "zookeeperNIC2",
+      "type": "String"
+    }
+  },
+  "variables": {},
+  "resources": [
+    {
+      "type": "Microsoft.Network/publicIPAddresses",
+      "apiVersion": "2020-11-01",
+      "name": "[parameters('publicIPAddresses_publicIP0_name')]",
+      "location": "australiaeast",
+      "sku": {
+        "name": "Basic",
+        "tier": "Regional"
+      },
+      "properties": {
+        "ipAddress": "20.213.157.20",
+        "publicIPAddressVersion": "IPv4",
+        "publicIPAllocationMethod": "Dynamic",
+        "idleTimeoutInMinutes": 4,
+        "ipTags": []
+      }
+    },
+    {
+      "type": "Microsoft.Network/publicIPAddresses",
+      "apiVersion": "2020-11-01",
+      "name": "[parameters('publicIPAddresses_publicIP1_name')]",
+      "location": "australiaeast",
+      "sku": {
+        "name": "Basic",
+        "tier": "Regional"
+      },
+      "properties": {
+        "ipAddress": "20.213.157.11",
+        "publicIPAddressVersion": "IPv4",
+        "publicIPAllocationMethod": "Dynamic",
+        "idleTimeoutInMinutes": 4,
+        "ipTags": []
+      }
+    },
+    {
+      "type": "Microsoft.Network/publicIPAddresses",
+      "apiVersion": "2020-11-01",
+      "name": "[parameters('publicIPAddresses_publicIP2_name')]",
+      "location": "australiaeast",
+      "sku": {
+        "name": "Basic",
+        "tier": "Regional"
+      },
+      "properties": {
+        "ipAddress": "20.213.157.21",
+        "publicIPAddressVersion": "IPv4",
+        "publicIPAllocationMethod": "Dynamic",
+        "idleTimeoutInMinutes": 4,
+        "ipTags": []
+      }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworks",
+      "apiVersion": "2020-11-01",
+      "name": "[parameters('virtualNetworks_zookeeperVNET_name')]",
+      "location": "australiaeast",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "10.0.0.0/16"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "Subnet-1",
+            "properties": {
+              "addressPrefix": "10.0.0.0/24",
+              "delegations": [],
+              "privateEndpointNetworkPolicies": "Enabled",
+              "privateLinkServiceNetworkPolicies": "Enabled"
+            }
+          }
+        ],
+        "virtualNetworkPeerings": [],
+        "enableDdosProtection": false
+      }
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "apiVersion": "2021-11-01",
+      "name": "[concat(parameters('virtualMachines_zk0_name'), '/zookeeperInstall')]",
+      "location": "australiaeast",
+      "dependsOn": [
+        "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_zk0_name'))]"
+      ],
+      "properties": {
+        "autoUpgradeMinorVersion": true,
+        "publisher": "Microsoft.Azure.Extensions",
+        "type": "CustomScript",
+        "typeHandlerVersion": "2.0",
+        "settings": {
+          "fileUris": [
+            "https://raw.githubusercontent.com/theoem/azure-zk/main/install.sh"
+          ],
+          "commandToExecute": "sh install.sh"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "apiVersion": "2021-11-01",
+      "name": "[concat(parameters('virtualMachines_zk1_name'), '/zookeeperInstall')]",
+      "location": "australiaeast",
+      "dependsOn": [
+        "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_zk1_name'))]"
+      ],
+      "properties": {
+        "autoUpgradeMinorVersion": true,
+        "publisher": "Microsoft.Azure.Extensions",
+        "type": "CustomScript",
+        "typeHandlerVersion": "2.0",
+        "settings": {
+          "fileUris": [
+            "https://raw.githubusercontent.com/theoem/azure-zk/main/install.sh"
+          ],
+          "commandToExecute": "sh install.sh"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "apiVersion": "2021-11-01",
+      "name": "[concat(parameters('virtualMachines_zk2_name'), '/zookeeperInstall')]",
+      "location": "australiaeast",
+      "dependsOn": [
+        "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_zk2_name'))]"
+      ],
+      "properties": {
+        "autoUpgradeMinorVersion": true,
+        "publisher": "Microsoft.Azure.Extensions",
+        "type": "CustomScript",
+        "typeHandlerVersion": "2.0",
+        "settings": {
+          "fileUris": [
+            "https://raw.githubusercontent.com/theoem/azure-zk/main/install.sh"
+          ],
+          "commandToExecute": "sh install.sh"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworks/subnets",
+      "apiVersion": "2020-11-01",
+      "name": "[concat(parameters('virtualNetworks_zookeeperVNET_name'), '/Subnet-1')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_zookeeperVNET_name'))]"
+      ],
+      "properties": {
+        "addressPrefix": "10.0.0.0/24",
+        "delegations": [],
+        "privateEndpointNetworkPolicies": "Enabled",
+        "privateLinkServiceNetworkPolicies": "Enabled"
+      }
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines",
+      "apiVersion": "2021-11-01",
+      "name": "[parameters('virtualMachines_zk0_name')]",
+      "location": "australiaeast",
+      "dependsOn": [
+        "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySets_zookeeperAvSet_name'))]",
+        "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_zookeeperNIC0_name'))]"
+      ],
+      "properties": {
+        "availabilitySet": {
+          "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySets_zookeeperAvSet_name'))]"
+        },
+        "hardwareProfile": {
+          "vmSize": "Standard_B1s"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "Canonical",
+            "offer": "UbuntuServer",
+            "sku": "18.04-LTS",
+            "version": "latest"
+          },
+          "osDisk": {
+            "osType": "Linux",
+            "name": "[concat(parameters('virtualMachines_zk0_name'), '_OSDisk')]",
+            "createOption": "FromImage",
+            "caching": "ReadWrite",
+            "managedDisk": {
+              "storageAccountType": "StandardSSD_LRS"
+            },
+            "deleteOption": "Detach",
+            "diskSizeGB": 30
+          },
+          "dataDisks": []
+        },
+        "osProfile": {
+          "computerName": "[parameters('virtualMachines_zk0_name')]",
+          "adminUsername": "azureuser",
+          "linuxConfiguration": {
+            "disablePasswordAuthentication": true,
+            "ssh": {
+              "publicKeys": [
+                {
+                  "path": "/home/azureuser/.ssh/authorized_keys",
+                  "keyData": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCsN97hnJ9vaQ4NIBvfcVd2rh+qRtE+Wh+TQApvJF8Cqay9fBrn/iLWUiqsXvq2rtFZcM+thvhpgR9dia6tIeYTLK8fE/CAqdqndfZnHDbLOXSDJhXzdi27LcSU3dWoALacHQibS+yXEdYN0kx2B9l3TPP1E2Or8A6M5OPamcjryiN+AFIa+ZmV0KCUlMYARvfQsOi32xbEk9ZaVdn6TU/sjMXv4EKQ2LytyCu7xc3CUMc9VMUAdLm03A0HfGJkkWfy0A+PYe6VLT5y9SHjy0kMnfcwhML1kSGiz90Ye14um59C6rLh++ezMkD6zeC6xODH87fYv5I68m0ThIKbfXyKF9GkQFfuob+jzDBLTBD1p71Dpz3RrXyiORBfTdrAICY5aOY0lUw+Yj8znh2TrQ/wkKgIbPJODFD/PF37POpWteQwppInRVkIkH7V3DPQLsHVy87a/vmSm1cFerabaiyuPex+p/aguTvN4alEDjt6KFA0VXqa0MMJCCs/rgao9YGK9UXy2MElPp6zvDdPSVZXZjR6Xrgr6eTnuWVGU97FKyBk+46kE5wrwHY6FEG/O1/nQxHM+zL5DWK0I4rvEJRvtP8+824S244Cho26ypPsuvtlLYHOEnJRZLdHIllVurN38Fh1KZ5mPl0KjKsl4n2iNQRJetO9sdV+6qNVmJlyPw== teodoras.celencevicius@hostinger.com"
+                }
+              ]
+            },
+            "provisionVMAgent": true,
+            "patchSettings": {
+              "patchMode": "ImageDefault",
+              "assessmentMode": "ImageDefault"
+            }
+          },
+          "secrets": [],
+          "allowExtensionOperations": true
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_zookeeperNIC0_name'))]"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines",
+      "apiVersion": "2021-11-01",
+      "name": "[parameters('virtualMachines_zk1_name')]",
+      "location": "australiaeast",
+      "dependsOn": [
+        "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySets_zookeeperAvSet_name'))]",
+        "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_zookeeperNIC1_name'))]"
+      ],
+      "properties": {
+        "availabilitySet": {
+          "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySets_zookeeperAvSet_name'))]"
+        },
+        "hardwareProfile": {
+          "vmSize": "Standard_B1s"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "Canonical",
+            "offer": "UbuntuServer",
+            "sku": "18.04-LTS",
+            "version": "latest"
+          },
+          "osDisk": {
+            "osType": "Linux",
+            "name": "[concat(parameters('virtualMachines_zk1_name'), '_OSDisk')]",
+            "createOption": "FromImage",
+            "caching": "ReadWrite",
+            "managedDisk": {
+              "storageAccountType": "StandardSSD_LRS"
+            },
+            "deleteOption": "Detach",
+            "diskSizeGB": 30
+          },
+          "dataDisks": []
+        },
+        "osProfile": {
+          "computerName": "[parameters('virtualMachines_zk1_name')]",
+          "adminUsername": "azureuser",
+          "linuxConfiguration": {
+            "disablePasswordAuthentication": true,
+            "ssh": {
+              "publicKeys": [
+                {
+                  "path": "/home/azureuser/.ssh/authorized_keys",
+                  "keyData": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCsN97hnJ9vaQ4NIBvfcVd2rh+qRtE+Wh+TQApvJF8Cqay9fBrn/iLWUiqsXvq2rtFZcM+thvhpgR9dia6tIeYTLK8fE/CAqdqndfZnHDbLOXSDJhXzdi27LcSU3dWoALacHQibS+yXEdYN0kx2B9l3TPP1E2Or8A6M5OPamcjryiN+AFIa+ZmV0KCUlMYARvfQsOi32xbEk9ZaVdn6TU/sjMXv4EKQ2LytyCu7xc3CUMc9VMUAdLm03A0HfGJkkWfy0A+PYe6VLT5y9SHjy0kMnfcwhML1kSGiz90Ye14um59C6rLh++ezMkD6zeC6xODH87fYv5I68m0ThIKbfXyKF9GkQFfuob+jzDBLTBD1p71Dpz3RrXyiORBfTdrAICY5aOY0lUw+Yj8znh2TrQ/wkKgIbPJODFD/PF37POpWteQwppInRVkIkH7V3DPQLsHVy87a/vmSm1cFerabaiyuPex+p/aguTvN4alEDjt6KFA0VXqa0MMJCCs/rgao9YGK9UXy2MElPp6zvDdPSVZXZjR6Xrgr6eTnuWVGU97FKyBk+46kE5wrwHY6FEG/O1/nQxHM+zL5DWK0I4rvEJRvtP8+824S244Cho26ypPsuvtlLYHOEnJRZLdHIllVurN38Fh1KZ5mPl0KjKsl4n2iNQRJetO9sdV+6qNVmJlyPw== teodoras.celencevicius@hostinger.com"
+                }
+              ]
+            },
+            "provisionVMAgent": true,
+            "patchSettings": {
+              "patchMode": "ImageDefault",
+              "assessmentMode": "ImageDefault"
+            }
+          },
+          "secrets": [],
+          "allowExtensionOperations": true
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_zookeeperNIC1_name'))]"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines",
+      "apiVersion": "2021-11-01",
+      "name": "[parameters('virtualMachines_zk2_name')]",
+      "location": "australiaeast",
+      "dependsOn": [
+        "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySets_zookeeperAvSet_name'))]",
+        "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_zookeeperNIC2_name'))]"
+      ],
+      "properties": {
+        "availabilitySet": {
+          "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySets_zookeeperAvSet_name'))]"
+        },
+        "hardwareProfile": {
+          "vmSize": "Standard_B1s"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "Canonical",
+            "offer": "UbuntuServer",
+            "sku": "18.04-LTS",
+            "version": "latest"
+          },
+          "osDisk": {
+            "osType": "Linux",
+            "name": "[concat(parameters('virtualMachines_zk2_name'), '_OSDisk')]",
+            "createOption": "FromImage",
+            "caching": "ReadWrite",
+            "managedDisk": {
+              "storageAccountType": "StandardSSD_LRS"
+            },
+            "deleteOption": "Detach",
+            "diskSizeGB": 30
+          },
+          "dataDisks": []
+        },
+        "osProfile": {
+          "computerName": "[parameters('virtualMachines_zk2_name')]",
+          "adminUsername": "azureuser",
+          "linuxConfiguration": {
+            "disablePasswordAuthentication": true,
+            "ssh": {
+              "publicKeys": [
+                {
+                  "path": "/home/azureuser/.ssh/authorized_keys",
+                  "keyData": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCsN97hnJ9vaQ4NIBvfcVd2rh+qRtE+Wh+TQApvJF8Cqay9fBrn/iLWUiqsXvq2rtFZcM+thvhpgR9dia6tIeYTLK8fE/CAqdqndfZnHDbLOXSDJhXzdi27LcSU3dWoALacHQibS+yXEdYN0kx2B9l3TPP1E2Or8A6M5OPamcjryiN+AFIa+ZmV0KCUlMYARvfQsOi32xbEk9ZaVdn6TU/sjMXv4EKQ2LytyCu7xc3CUMc9VMUAdLm03A0HfGJkkWfy0A+PYe6VLT5y9SHjy0kMnfcwhML1kSGiz90Ye14um59C6rLh++ezMkD6zeC6xODH87fYv5I68m0ThIKbfXyKF9GkQFfuob+jzDBLTBD1p71Dpz3RrXyiORBfTdrAICY5aOY0lUw+Yj8znh2TrQ/wkKgIbPJODFD/PF37POpWteQwppInRVkIkH7V3DPQLsHVy87a/vmSm1cFerabaiyuPex+p/aguTvN4alEDjt6KFA0VXqa0MMJCCs/rgao9YGK9UXy2MElPp6zvDdPSVZXZjR6Xrgr6eTnuWVGU97FKyBk+46kE5wrwHY6FEG/O1/nQxHM+zL5DWK0I4rvEJRvtP8+824S244Cho26ypPsuvtlLYHOEnJRZLdHIllVurN38Fh1KZ5mPl0KjKsl4n2iNQRJetO9sdV+6qNVmJlyPw== teodoras.celencevicius@hostinger.com"
+                }
+              ]
+            },
+            "provisionVMAgent": true,
+            "patchSettings": {
+              "patchMode": "ImageDefault",
+              "assessmentMode": "ImageDefault"
+            }
+          },
+          "secrets": [],
+          "allowExtensionOperations": true
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_zookeeperNIC2_name'))]"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "2020-11-01",
+      "name": "[parameters('networkInterfaces_zookeeperNIC0_name')]",
+      "location": "australiaeast",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_publicIP0_name'))]",
+        "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_zookeeperVNET_name'), 'Subnet-1')]"
+      ],
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAddress": "10.0.0.4",
+              "privateIPAllocationMethod": "Static",
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_publicIP0_name'))]"
+              },
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_zookeeperVNET_name'), 'Subnet-1')]"
+              },
+              "primary": true,
+              "privateIPAddressVersion": "IPv4"
+            }
+          }
+        ],
+        "dnsSettings": {
+          "dnsServers": []
+        },
+        "enableAcceleratedNetworking": false,
+        "enableIPForwarding": false
+      }
+    },
+    {
+      "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "2020-11-01",
+      "name": "[parameters('networkInterfaces_zookeeperNIC1_name')]",
+      "location": "australiaeast",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_publicIP1_name'))]",
+        "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_zookeeperVNET_name'), 'Subnet-1')]"
+      ],
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAddress": "10.0.0.5",
+              "privateIPAllocationMethod": "Static",
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_publicIP1_name'))]"
+              },
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_zookeeperVNET_name'), 'Subnet-1')]"
+              },
+              "primary": true,
+              "privateIPAddressVersion": "IPv4"
+            }
+          }
+        ],
+        "dnsSettings": {
+          "dnsServers": []
+        },
+        "enableAcceleratedNetworking": false,
+        "enableIPForwarding": false
+      }
+    },
+    {
+      "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "2020-11-01",
+      "name": "[parameters('networkInterfaces_zookeeperNIC2_name')]",
+      "location": "australiaeast",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_publicIP2_name'))]",
+        "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_zookeeperVNET_name'), 'Subnet-1')]"
+      ],
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAddress": "10.0.0.6",
+              "privateIPAllocationMethod": "Static",
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_publicIP2_name'))]"
+              },
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_zookeeperVNET_name'), 'Subnet-1')]"
+              },
+              "primary": true,
+              "privateIPAddressVersion": "IPv4"
+            }
+          }
+        ],
+        "dnsSettings": {
+          "dnsServers": []
+        },
+        "enableAcceleratedNetworking": false,
+        "enableIPForwarding": false
+      }
+    },
+    {
+      "type": "Microsoft.Compute/availabilitySets",
+      "apiVersion": "2021-11-01",
+      "name": "[parameters('availabilitySets_zookeeperAvSet_name')]",
+      "location": "australiaeast",
+      "sku": {
+        "name": "Aligned"
+      },
+      "properties": {
+        "platformUpdateDomainCount": 20,
+        "platformFaultDomainCount": 2,
+        "virtualMachines": [
+          {
+            "id": "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_zk0_name'))]"
+          },
+          {
+            "id": "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_zk1_name'))]"
+          },
+          {
+            "id": "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_zk2_name'))]"
+          }
+        ]
+      }
+    }
+  ]
+}
