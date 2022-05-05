@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo apt update -y
+apt update -y
 apt install default-jdk -y
 
 mkdir -p /data/zookeeper
@@ -18,6 +18,6 @@ server.1=10.0.0.4:2888:3888
 server.2=10.0.0.5:2888:3888
 server.3=10.0.0.6:2888:3888' > /opt/zookeeper/conf/zoo.cfg
 
-grep `hostname -I` test | egrep -o 'server.{0,2}' | awk -F . '{print $2}' > /data/zookeeper/myid 
+grep `hostname -I` /opt/zookeeper/conf/zoo.cfg | egrep -o 'server.{0,2}' | awk -F . '{print $2}'
 
 cd /opt/zookeeper && bin/zkServer.sh start
