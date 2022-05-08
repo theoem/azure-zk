@@ -12,7 +12,7 @@ echo "Creating zoo.fg file"
 echo 'tickTime=2000
 dataDir=/data/zookeeper
 clientPort=2181
-maxClientCnxns=60
+maxClientCnxns=0
 initLimit=10
 syncLimit=5
 4lw.commands.whitelist=*
