@@ -8,6 +8,8 @@ mkdir -p /data/zookeeper
 wget -c https://dlcdn.apache.org/zookeeper/zookeeper-3.8.0/apache-zookeeper-3.8.0-bin.tar.gz -O - | sudo tar -xz -C /opt
 ln -s /opt/apache-zookeeper-3.8.0-bin/ /opt/zookeeper
 
+wget https://raw.githubusercontent.com/theoem/azure-zk/main/monitor.sh -P /opt/zookeeper
+
 echo "Creating zoo.fg file"
 echo 'tickTime=2000
 dataDir=/data/zookeeper
