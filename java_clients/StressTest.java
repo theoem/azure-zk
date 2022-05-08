@@ -2,17 +2,12 @@ package org.main;
 
 import org.apache.zookeeper.KeeperException;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 public class StressTest {
-    static int operationsDone = 0;
-    static Date startTime;
 
     private static class Client implements Runnable {
         private String id;
@@ -93,18 +88,6 @@ public class StressTest {
         }
     }
 
-    static public void printToFile(String text, String filename) {
-        try {
-            File file = new File(filename);
-            FileWriter fr = new FileWriter(file, true);
-            fr.write(text + "\n");
-            fr.close();
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-    }
-
     public static void main(String[] args) {
 
         if (args.length < 5) {
@@ -119,8 +102,6 @@ public class StressTest {
         int count = Integer.parseInt(args[2]);
         double ratioWrite = Double.parseDouble(args[3]);
         int clientCount = Integer.parseInt(args[4]);
-
-        startTime = new Date();
 
         for (int i = 0; i < clientCount; i++) {
             Client client = new Client(hostPort, root, count, ratioWrite, i);

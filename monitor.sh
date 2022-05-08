@@ -3,6 +3,7 @@
 old_requests=0
 old_date=`date '+%s'`
 elapsed_time=0
+request_diff=0
 
 zero_counter=0
 
@@ -24,14 +25,14 @@ do
 	  sleep 1
   fi
   echo $zero_counter
-  if [ $request_diff -eq 0 ]
+  if [ "$request_diff" -eq "0" ]
   then
 	  zero_counter=$(($zero_counter+1))
   else
 	  zero_counter=0
   fi
 
-  if [ $zero_counter -gt 10 ]
+  if [ "$zero_counter" -gt "10" ]
   then
 	  exit 1
   fi
