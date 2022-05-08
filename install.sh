@@ -26,4 +26,6 @@ sed -i 's/appender--/appender/g' /opt/zookeeper/conf/logback.xml
 sed -i 's/!--property name="zookeeper.tracelog.dir"/property name="zookeeper.tracelog.dir"/g' /opt/zookeeper/conf/logback.xml
 sed -i 's/"zookeeper.log.dir" value="."/"zookeeper.log.dir" value="\/var\/log"/g' /opt/zookeeper/conf/logback.xml
 
+grep `hostname -I` /opt/zookeeper/conf/zoo.cfg | egrep -o 'server.{0,2}' | awk -F . '{print $2}' >/data/zookeeper/myid
+
 cd /opt/zookeeper && bin/zkServer.sh start
