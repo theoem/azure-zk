@@ -21,8 +21,8 @@ do
   else
 	  elapsed_time=$(($elapsed_time+$date-$old_date))
 	  request_diff=$(($requests-$old_requests))
-	  echo $elapsed_time,$request_diff | tee -a ~/data/$2.csv
-          echo $latency >> ~/data/$2_latency.csv
+	  echo $elapsed_time,$request_diff | tee -a ~/data/$1.csv
+          echo $latency >> ~/data/$1_latency.csv
 
 	  old_requests=$requests
 	  old_date=$date
