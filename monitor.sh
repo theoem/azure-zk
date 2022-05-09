@@ -30,7 +30,13 @@ do
   else
 	  elapsed_time=$(($elapsed_time+$date-$old_date))
 	  request_diff=$(($requests-$old_requests))
-	  echo $elapsed_time,$request_diff | tee -a ~/data/$1.csv
+	  if [ $(($date-$old_date)) -gt 0 ]
+	  then
+		  throughtput=$(($request_diff/($date-$old_date)))
+	  else
+		  throughtput=$request_diff
+	  fi
+	  echo $elapsed_time,$throughtput | tee -a ~/data/$1.csv
           echo $elapsed_time,$latency >> ~/data/$1_latency.csv
 
 	  old_requests=$requests
