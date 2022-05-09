@@ -18,13 +18,13 @@ do
   else
 	  elapsed_time=$(($elapsed_time+$date-$old_date))
 	  request_diff=$(($requests-$old_requests))
-	  echo $elapsed_time,$request_diff
+	  echo $elapsed_time,$request_diff | tee -a $2
 
 	  old_requests=$requests
 	  old_date=$date
 	  sleep 1
   fi
-
+  echo $zero_counter
   if [ "$request_diff" -eq "0" ]
   then
 	  zero_counter=$(($zero_counter+1))
