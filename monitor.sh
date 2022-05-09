@@ -24,7 +24,6 @@ do
 	  old_date=$date
 	  sleep 1
   fi
-  echo $zero_counter
   if [ "$request_diff" -eq "0" ]
   then
 	  zero_counter=$(($zero_counter+1))
