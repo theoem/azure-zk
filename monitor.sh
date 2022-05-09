@@ -8,6 +8,8 @@ request_diff=0
 zero_counter=0
 
 mkdir ~/data
+echo elapsed_time,throughput > ~/data/$1.csv
+echo elapsed_time,min,avg,max > ~/data/$1_latency.csv
 
 while true
 do
