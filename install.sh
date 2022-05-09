@@ -9,6 +9,7 @@ wget -c https://dlcdn.apache.org/zookeeper/zookeeper-3.8.0/apache-zookeeper-3.8.
 ln -s /opt/apache-zookeeper-3.8.0-bin/ /opt/zookeeper
 
 sudo wget https://raw.githubusercontent.com/theoem/azure-zk/main/monitor.sh -P /opt/zookeeper
+chmod +x /opt/zookeeper/monitor.sh
 
 echo "Creating zoo.fg file"
 echo 'tickTime=2000

@@ -1,5 +1,12 @@
 #!/bin/bash
 
+if [[ $@ == "--help" ||  $@ == "-h" ]]
+then
+	echo "Usage: $0 znode"
+	echo "The znode has to be written without the initial / path"
+	exit 0
+fi
+
 old_requests=0
 old_date=`date '+%s'`
 elapsed_time=0
