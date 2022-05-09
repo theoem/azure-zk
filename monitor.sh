@@ -11,6 +11,7 @@ while true
 do
   date=`date '+%s'`
   requests=`echo mntr | nc localhost 2181 | grep -E "zk_cnt_$1_read_per_namespace|zk_cnt_$1_write_per_namespace" | awk '{sum+=$2;} END{print sum;}'`
+  latency=`echo stat | nc localhost 2181 | grep Latency | awk '{print $3}' | awk -F / '{print $1","$2","$3}'`
 
   if [ -z "$requests" ]
   then
@@ -19,6 +20,7 @@ do
 	  elapsed_time=$(($elapsed_time+$date-$old_date))
 	  request_diff=$(($requests-$old_requests))
 	  echo $elapsed_time,$request_diff | tee -a $2
+          echo $latency >> latency_$2
 
 	  old_requests=$requests
 	  old_date=$date
