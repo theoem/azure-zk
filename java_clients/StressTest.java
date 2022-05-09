@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class StressTest {
 
@@ -65,14 +66,12 @@ public class StressTest {
         public static List<Character> operationsList(int count, double ratioWrite) {
             List<Character> operations = new ArrayList<>();
             int countWrite = (int) (count * ratioWrite);
-            System.out.println(countWrite);
 
             for (int i = 0; i < count; i++) {
                 operations.add('r');
             }
 
             for (int i = 0; i < countWrite; i++) {
-                System.out.println(i);
                 operations.set(i, 'w');
             }
             Collections.shuffle(operations);
@@ -103,10 +102,22 @@ public class StressTest {
         double ratioWrite = Double.parseDouble(args[3]);
         int clientCount = Integer.parseInt(args[4]);
 
-        for (int i = 0; i < clientCount; i++) {
-            Client client = new Client(hostPort, root, count, ratioWrite, i);
-            client.start();
+        int batchNum = 10;
+        int batchSize = clientCount / batchNum;
+
+
+        for (int i = 0; i < batchNum; i++) {
+            for (int j = 0; j < batchSize; i++) {
+                Client client = new Client(hostPort, root, count, ratioWrite, j);
+                client.start();
+            }
+            try {
+                TimeUnit.SECONDS.sleep(5);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
         }
+
 
     }
 }
