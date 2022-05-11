@@ -68,10 +68,6 @@ public class ZkConnector implements Watcher{
 
     @Override
     public void process(WatchedEvent watchedEvent) {
-        if (watchedEvent.getState() == Event.KeeperState.SyncConnected) {
-            requests += 1;
-            System.out.println("Requests all: " + requests);
-        }
     }
     public void close() throws InterruptedException {
         zk.close();

@@ -4,7 +4,6 @@ import org.apache.zookeeper.KeeperException;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -89,10 +88,10 @@ public class StressTest {
 
     public static void main(String[] args) {
 
-        if (args.length < 5) {
+        if (args.length < 6) {
             System.err
                     .println("USAGE: StressTest hostPort root countOperation" +
-                            "ratioWrite clientCount");
+                            "ratioWrite clientCount batchSize");
             System.exit(2);
         }
 
@@ -101,18 +100,16 @@ public class StressTest {
         int count = Integer.parseInt(args[2]);
         double ratioWrite = Double.parseDouble(args[3]);
         int clientCount = Integer.parseInt(args[4]);
-
-        int batchNum = 10;
-        int batchSize = clientCount / batchNum;
+        int batchSize = Integer.parseInt(args[5]);
 
 
-        for (int i = 0; i < batchNum; i++) {
-            for (int j = 0; j < batchSize; i++) {
+        for (int i = 0; i < clientCount/batchSize; i++) {
+            for (int j = 0; j < batchSize; j++) {
                 Client client = new Client(hostPort, root, count, ratioWrite, j);
                 client.start();
             }
             try {
-                TimeUnit.SECONDS.sleep(5);
+                TimeUnit.SECONDS.sleep(1);
             } catch (Exception e) {
                 System.out.println(e);
             }
