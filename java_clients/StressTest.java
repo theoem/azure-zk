@@ -54,7 +54,6 @@ public class StressTest {
                         conn.create(root, 0, false);
                     }
                     else {
-                        //conn.getChildren(root);
                         conn.read(root);
                     }
                 } catch (KeeperException | InterruptedException e){
@@ -90,7 +89,7 @@ public class StressTest {
 
         if (args.length < 6) {
             System.err
-                    .println("USAGE: StressTest hostPort root countOperation" +
+                    .println("USAGE: StressTest host:port /root operationsCount " +
                             "ratioWrite clientCount batchSize");
             System.exit(2);
         }
